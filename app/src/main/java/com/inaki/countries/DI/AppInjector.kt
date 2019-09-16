@@ -13,5 +13,5 @@ val networkModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { CountriesViewModel(get()) }
+    viewModel { CountriesViewModel(get(),androidContext()) }
 }
