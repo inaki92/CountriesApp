@@ -1,7 +1,8 @@
-package com.inaki.countries
+package com.inaki.countries.UI
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.inaki.countries.R
 
 class MainActivity : AppCompatActivity() {
 
