@@ -1,6 +1,8 @@
 package com.inaki.countries
 
 import android.app.Application
+import com.inaki.countries.DI.dbModule
+import com.inaki.countries.DI.localDataModule
 import com.inaki.countries.DI.networkModule
 import com.inaki.countries.DI.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -13,7 +15,7 @@ class CountriesApp: Application() {
 
         startKoin {
             androidContext(this@CountriesApp)
-            modules(listOf(networkModule, viewModelModule))
+            modules(listOf(networkModule, viewModelModule, localDataModule, dbModule))
         }
     }
 }
