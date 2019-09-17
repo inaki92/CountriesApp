@@ -13,5 +13,6 @@ data class CountriesEntity (
     @ColumnInfo(name = "subRegion")var subRegion: String,
     @ColumnInfo(name = "timeZone")var timeZones: String,
     @ColumnInfo(name = "currencies")var currencies: String,
-    @ColumnInfo(name = "languages")var languages: String
+    @ColumnInfo(name = "languages")var languages: String,
+    @ColumnInfo(name = "flag")var flagFile: String
     )

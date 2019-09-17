@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(), OnItemClick {
             } else {
                 countriesViewModel.loadCountry(true)
                 search_country.visibility = View.INVISIBLE
-                Log.d("main","ONCREATE")
                 countriesViewModel.getCountriesDB().observe(this, Observer {
                     if (countriesOffline != it) {
                         countriesOffline.addAll(it)

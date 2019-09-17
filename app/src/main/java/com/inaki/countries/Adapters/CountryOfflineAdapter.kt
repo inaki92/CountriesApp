@@ -1,6 +1,7 @@
 package com.inaki.countries.Adapters
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ RecyclerView.Adapter<CountryOfflineAdapter.OfflineViewHolder>() {
         }
 
         var countryName = itemView.country_name!!
+        var flag = itemView.flag_img!!
 
         override fun onClick(v: View?) {
             onClickListener.itemClicked(countryName.text.toString())
@@ -47,6 +49,7 @@ RecyclerView.Adapter<CountryOfflineAdapter.OfflineViewHolder>() {
     override fun onBindViewHolder(holder: OfflineViewHolder, position: Int) {
         val country = countriesOffline[position]
         holder.countryName.text = country.name
+        holder.flag.setImageBitmap(BitmapFactory.decodeFile(country.flagFile))
     }
 
 
