@@ -2,6 +2,8 @@ package com.inaki.countries.UI
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.ContextWrapper
+import android.graphics.drawable.BitmapDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
@@ -11,13 +13,20 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.inaki.countries.Model.CountriesModel
-import com.inaki.countries.R
 import com.inaki.countries.RoomDB.CountriesEntity
 import com.inaki.countries.ViewModel.CountriesViewModel
 import kotlinx.android.synthetic.main.activity_details_country.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.view.View
 import kotlin.collections.ArrayList
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import com.inaki.countries.R
+import java.io.*
+import java.util.*
+
 
 class DetailsCountryActivity : AppCompatActivity() {
 
@@ -48,10 +57,55 @@ class DetailsCountryActivity : AppCompatActivity() {
                 sub_region_country.text.removePrefix("Sub Region:").toString(),
                 time_zone.text.removePrefix("Time Zones").toString(),
                 currencies_country.text.removePrefix("Currencies:").toString(),
-                languages_country.text.removePrefix("Languages:").toString()
+                languages_country.text.removePrefix("Languages:").toString(),
+                saveImageToInternalStorage(drawableToBitmap(flagIcon.drawable)!!)
                 ))
+
             Toast.makeText(this,"Country saved!",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun saveImageToInternalStorage(bitmap: Bitmap):String{
+        val wrapper = ContextWrapper(applicationContext)
+        var file = wrapper.getDir("images", Context.MODE_PRIVATE)
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        try {
+            val stream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush()
+            stream.close()
+        } catch (e: IOException){
+            e.printStackTrace()
+        }
+        return file.absolutePath
+    }
+
+    private fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        val bitmap: Bitmap? = if (drawable.intrinsicWidth <= 0 || drawable.intrinsicHeight <= 0) {
+            Bitmap.createBitmap(
+                1,
+                1,
+                Bitmap.Config.ARGB_8888
+            )
+        } else {
+            Bitmap.createBitmap(
+                drawable.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+        }
+
+        if (drawable is BitmapDrawable) {
+            if (drawable.bitmap != null) {
+                return drawable.bitmap
+            }
+        }
+
+        val canvas = Canvas(bitmap!!)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 
     private fun loadCountryDetails(countryName: String?) {
@@ -81,6 +135,7 @@ class DetailsCountryActivity : AppCompatActivity() {
                 time_zone.text = "Time Zones: "+countries[item].timeZones
                 currencies_country.text = "Currencies: "+countries[item].currencies
                 languages_country.text = "Languages: "+countries[item].languages
+                flagIcon.setImageBitmap(BitmapFactory.decodeFile(countries[item].flagFile))
             }
         }
 
